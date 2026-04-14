@@ -206,7 +206,7 @@ with col_l:
         color:{NAVY};border-bottom:1px solid #d4cdc6;padding-bottom:10px;
         margin-bottom:20px;">Registrer inntak</div>""", unsafe_allow_html=True)
 
-    user   = st.selectbox("Hvem er du?", data.get("users", ["Erik", "Trym"]))
+    user   = st.selectbox("Velg navn", ["Trym", "Erik"])
     flavor_display = st.selectbox("Smak", list(FLAVORS.keys()))
     flavor = FLAVORS[flavor_display]
     amount = st.number_input("Antall YT", min_value=1,
@@ -354,6 +354,30 @@ for e in data["log"]:
 df = pd.DataFrame.from_dict(chart_data, orient="index")
 df.index = [d[5:] for d in df.index]
 st.bar_chart(df, color=[CHOC, TEAL])
+
+st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
+            unsafe_allow_html=True)
+
+# ── GRAF: PER PERSON ──────────────────────────────────────────────────────────
+st.markdown(f"""<div style="font-family:'EB Garamond',serif;font-size:22px;
+    color:{NAVY};border-bottom:1px solid #d4cdc6;padding-bottom:10px;
+    margin-bottom:20px;">Daglig forbruk per person – siste 14 dager</div>""",
+    unsafe_allow_html=True)
+
+person_chart = {}
+for i in range(13, -1, -1):
+    d = str(today_d - timedelta(days=i))
+    person_chart[d] = {"Trym": 0, "Erik": 0}
+
+for e in data["log"]:
+    d = e.get("date")
+    u = e.get("user", "")
+    if d in person_chart and u in person_chart[d]:
+        person_chart[d][u] += 1
+
+df_persons = pd.DataFrame.from_dict(person_chart, orient="index")
+df_persons.index = [d[5:] for d in df_persons.index]
+st.bar_chart(df_persons, color=[TEAL, NAVY])
 
 st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
             unsafe_allow_html=True)
