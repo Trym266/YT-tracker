@@ -10,205 +10,35 @@ st.set_page_config(
     layout="wide"
 )
 
-# ─── FERD DESIGN SYSTEM ───────────────────────────────────────────────────────
-# Farger hentet direkte fra Ferd Konsern-presentasjon og merkevareprofil:
-# Marineblå #1F2E4B · Beige #EFE7E0 · Teal #3B756A · Hvit #FFFFFF · Mørk tekst #1a1a1a
+# ── Ferd farger ──────────────────────────────────────────────────────────────
+NAVY   = "#1F2E4B"
+BEIGE  = "#EFE7E0"
+TEAL   = "#3B756A"
+CHOC   = "#5C3317"
+ORANGE = "#C8532A"
+WHITE  = "#FFFFFF"
 
-st.markdown("""
+st.markdown(f"""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,700;1,500&family=Inter:wght@300;400;600&display=swap');
 
-* { box-sizing: border-box; }
-
-html, body, [class*="css"] {
+html, body, [class*="css"] {{
     font-family: 'Inter', sans-serif !important;
-    background-color: #EFE7E0 !important;
-}
+    background-color: {BEIGE} !important;
+}}
+.stApp {{ background-color: {BEIGE} !important; }}
+.block-container {{
+    padding-top: 0 !important;
+    padding-left: 3rem !important;
+    padding-right: 3rem !important;
+    max-width: 1100px !important;
+}}
+#MainMenu, footer, header {{ visibility: hidden; }}
 
-.stApp { background-color: #EFE7E0 !important; }
-
-/* ── Topplinje ── */
-.ferd-topbar {
-    background: #1F2E4B;
-    padding: 0 40px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0;
-}
-.ferd-wordmark {
-    font-family: 'EB Garamond', serif;
-    font-size: 26px;
-    font-weight: 600;
-    letter-spacing: 5px;
-    color: #EFE7E0;
-    text-transform: uppercase;
-}
-.ferd-wordmark em { color: #3B756A; font-style: normal; }
-.ferd-topbar-right {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #8fa0b8;
-}
-
-/* ── Hero-stripe ── */
-.ferd-hero {
-    background: #1F2E4B;
-    padding: 36px 40px 32px;
-    margin-bottom: 32px;
-}
-.ferd-hero-title {
-    font-family: 'EB Garamond', serif;
-    font-size: 48px;
-    font-weight: 400;
-    color: #EFE7E0;
-    line-height: 1.1;
-    margin: 0 0 6px;
-}
-.ferd-hero-title em {
-    font-style: italic;
-    color: #3B756A;
-}
-.ferd-hero-sub {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: #7a90aa;
-    margin: 0;
-}
-
-/* ── KPI-kort ── */
-.kpi-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    margin-bottom: 32px;
-}
-.kpi-card {
-    background: #ffffff;
-    border-radius: 2px;
-    padding: 24px 22px 20px;
-    border-top: 4px solid #1F2E4B;
-    position: relative;
-    overflow: hidden;
-}
-.kpi-card.teal { border-top-color: #3B756A; }
-.kpi-card.warn  { border-top-color: #C8532A; }
-.kpi-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: #8a8a8a;
-    margin-bottom: 10px;
-}
-.kpi-number {
-    font-family: 'EB Garamond', serif;
-    font-size: 52px;
-    font-weight: 600;
-    color: #1F2E4B;
-    line-height: 1;
-    margin-bottom: 4px;
-}
-.kpi-number.teal { color: #3B756A; }
-.kpi-number.warn  { color: #C8532A; }
-.kpi-unit {
-    font-size: 11px;
-    color: #aaa;
-    margin-bottom: 14px;
-}
-.kpi-bar-bg {
-    background: #EFE7E0;
-    height: 3px;
-    border-radius: 2px;
-    overflow: hidden;
-}
-.kpi-bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    background: #1F2E4B;
-    transition: width .5s ease;
-}
-.kpi-bar-fill.teal { background: #3B756A; }
-.kpi-bar-fill.warn  { background: #C8532A; }
-
-/* ── Seksjonsoverskrift ── */
-.sec-head {
-    font-family: 'EB Garamond', serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: #1F2E4B;
-    margin: 0 0 18px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #d4cdc6;
-}
-
-/* ── Panel (hvit boks) ── */
-.panel {
-    background: #ffffff;
-    border-radius: 2px;
-    padding: 28px 26px;
-    margin-bottom: 20px;
-}
-
-/* ── Smaksbar ── */
-.flavor-row {
-    margin-bottom: 16px;
-}
-.flavor-meta {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: #555;
-    margin-bottom: 5px;
-}
-.flavor-name { font-weight: 600; color: #1F2E4B; }
-
-/* ── Person-kort ── */
-.person-card {
-    background: #EFE7E0;
-    border-radius: 2px;
-    padding: 16px 18px;
-    margin-bottom: 10px;
-    border-left: 4px solid #3B756A;
-}
-.person-name { font-weight: 600; font-size: 14px; color: #1F2E4B; margin-bottom: 6px; }
-.person-stats { font-size: 11px; color: #777; }
-
-/* ── Logg-rad ── */
-.log-row {
-    background: #fff;
-    border-left: 3px solid #3B756A;
-    padding: 11px 16px;
-    margin-bottom: 6px;
-    border-radius: 0 2px 2px 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-}
-.log-row.choc { border-left-color: #5C3317; }
-
-/* ── Badge ── */
-.badge {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 2px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-.badge-sjokolade { background: #f0e8e2; color: #5C3317; }
-.badge-banan-jordbaer { background: #e4f0ee; color: #2a5e54; }
-
-/* ── Knapper ── */
-.stButton > button {
-    background-color: #1F2E4B !important;
-    color: #EFE7E0 !important;
+/* Knapper */
+.stButton > button {{
+    background-color: {NAVY} !important;
+    color: {BEIGE} !important;
     font-family: 'Inter', sans-serif !important;
     font-weight: 600 !important;
     font-size: 11px !important;
@@ -216,47 +46,51 @@ html, body, [class*="css"] {
     text-transform: uppercase !important;
     border: none !important;
     border-radius: 2px !important;
-    padding: 13px 20px !important;
+    padding: 12px 18px !important;
     width: 100% !important;
-    transition: background .2s !important;
-}
-.stButton > button:hover { background-color: #3B756A !important; }
+}}
+.stButton > button:hover {{
+    background-color: {TEAL} !important;
+}}
 
-/* ── Inputs ── */
-div[data-baseweb="select"] > div {
-    background: #fff !important;
+/* Select og inputs */
+div[data-baseweb="select"] > div {{
+    background: {WHITE} !important;
     border: 1px solid #ccc7c0 !important;
     border-radius: 2px !important;
-}
-.stNumberInput > div > div > input,
-.stTextInput > div > div > input {
-    background: #fff !important;
+    font-family: 'Inter', sans-serif !important;
+}}
+.stNumberInput > div > div > input {{
+    background: {WHITE} !important;
     border: 1px solid #ccc7c0 !important;
     border-radius: 2px !important;
-    color: #1F2E4B !important;
-}
-label { color: #444 !important; font-size: 12px !important; font-weight: 500 !important; }
+    color: {NAVY} !important;
+    font-family: 'Inter', sans-serif !important;
+}}
+label, .stSelectbox label, .stNumberInput label {{
+    color: #555 !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.5px !important;
+}}
 
-/* ── Layout ── */
-.block-container { padding-top: 0 !important; max-width: 1200px !important; }
-#MainMenu, footer, header { visibility: hidden; }
-
-.divider { border: none; border-top: 1px solid #d4cdc6; margin: 28px 0; }
-
-/* ── Varseltekst ── */
-.stAlert { border-radius: 2px !important; }
+/* Expander */
+details summary {{
+    color: {NAVY} !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+}}
 </style>
 """, unsafe_allow_html=True)
 
-# ─── DATA ─────────────────────────────────────────────────────────────────────
+# ── DATA ─────────────────────────────────────────────────────────────────────
 DATA_FILE = "yt_data.json"
 
 FLAVORS = {
     "Sjokolade 🍫": "sjokolade",
     "Banan/Jordbær 🍌🍓": "banan-jordbaer"
 }
-
-USERS = ["Erik", "Trym"]
 
 def load_data():
     if os.path.exists(DATA_FILE):
@@ -277,99 +111,115 @@ def save_data(d):
 
 data = load_data()
 
-# ─── TOPPLINJE ────────────────────────────────────────────────────────────────
-st.markdown("""
-<div class="ferd-topbar">
-    <div class="ferd-wordmark">FERD<em>.</em></div>
-    <div class="ferd-topbar-right">YT · Kjøleskapstracker</div>
-</div>
-<div class="ferd-hero">
-    <p class="ferd-hero-title">YT-oversikt<br><em>Kjøleskap</em></p>
-    <p class="ferd-hero-sub">20g protein per enhet &nbsp;·&nbsp; Sjokolade &nbsp;·&nbsp; Banan/Jordbær</p>
-</div>
-""", unsafe_allow_html=True)
-
-# ─── BEREGNINGER ──────────────────────────────────────────────────────────────
-total_taken = data["start_count"] - data["current_count"]
+# ── BEREGNINGER ───────────────────────────────────────────────────────────────
+total_taken  = data["start_count"] - data["current_count"]
 total_protein = total_taken * 20
 days_elapsed = max((date.today() - date.fromisoformat(data["start_date"])).days + 1, 1)
-avg_per_day = round(total_taken / days_elapsed, 1)
-days_left_est = round(data["current_count"] / avg_per_day) if avg_per_day > 0 else "–"
+avg_per_day  = round(total_taken / days_elapsed, 1)
+days_left    = round(data["current_count"] / avg_per_day) if avg_per_day > 0 else "–"
+pct_left     = round(data["current_count"] / data["start_count"] * 100)
 
-today_d = date.today()
+today_d    = date.today()
 week_start = today_d - timedelta(days=today_d.weekday())
-week_log = [e for e in data["log"] if e.get("flavor") != "påfyll"
-            and date.fromisoformat(e["date"]) >= week_start]
+week_log   = [e for e in data["log"]
+              if e.get("flavor") != "påfyll"
+              and date.fromisoformat(e["date"]) >= week_start]
 week_protein = len(week_log) * 20
-weekly_goal = data.get("weekly_protein_goal", 200)
-week_pct = min(round(week_protein / weekly_goal * 100), 100)
-pct_left = round(data["current_count"] / data["start_count"] * 100)
+weekly_goal  = data.get("weekly_protein_goal", 200)
+week_pct     = min(round(week_protein / weekly_goal * 100), 100)
 
-# ─── KPI-KORT ─────────────────────────────────────────────────────────────────
-warn_class = "warn" if pct_left < 25 else ""
-
+# ── HEADER ────────────────────────────────────────────────────────────────────
 st.markdown(f"""
-<div class="kpi-grid">
-
-    <div class="kpi-card {warn_class}">
-        <div class="kpi-label">YT igjen</div>
-        <div class="kpi-number {warn_class}">{data['current_count']}</div>
-        <div class="kpi-unit">av {data['start_count']} totalt</div>
-        <div class="kpi-bar-bg"><div class="kpi-bar-fill {warn_class}" style="width:{pct_left}%"></div></div>
+<div style="background:{NAVY};padding:18px 32px 12px;margin-bottom:0;display:flex;
+            justify-content:space-between;align-items:center;">
+    <span style="font-family:'EB Garamond',serif;font-size:24px;font-weight:700;
+                 letter-spacing:5px;color:{BEIGE};text-transform:uppercase;">
+        FERD<span style="color:{TEAL}">.</span>
+    </span>
+    <span style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#7a90aa;">
+        YT &middot; Kjøleskapstracker
+    </span>
+</div>
+<div style="background:{NAVY};padding:20px 32px 28px;margin-bottom:32px;">
+    <div style="font-family:'EB Garamond',serif;font-size:42px;font-weight:500;
+                color:{BEIGE};line-height:1.1;margin-bottom:8px;">
+        YT-oversikt &nbsp;<em style="color:{TEAL};font-style:italic;">Kjøleskap</em>
     </div>
-
-    <div class="kpi-card teal">
-        <div class="kpi-label">Total protein</div>
-        <div class="kpi-number teal">{total_protein}<span style="font-size:22px;color:#aaa"> g</span></div>
-        <div class="kpi-unit">{total_taken} enheter · siden {data['start_date']}</div>
-        <div class="kpi-bar-bg"><div class="kpi-bar-fill teal" style="width:100%"></div></div>
+    <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#7a90aa;">
+        20g protein per enhet &nbsp;&middot;&nbsp; Sjokolade &nbsp;&middot;&nbsp; Banan/Jordbær
     </div>
-
-    <div class="kpi-card {'teal' if week_pct >= 100 else ''}">
-        <div class="kpi-label">Protein denne uken</div>
-        <div class="kpi-number {'teal' if week_pct >= 100 else ''}">{week_protein}<span style="font-size:22px;color:#aaa"> g</span></div>
-        <div class="kpi-unit">mål {weekly_goal}g &nbsp;·&nbsp; {week_pct}% nådd</div>
-        <div class="kpi-bar-bg"><div class="kpi-bar-fill {'teal' if week_pct >= 100 else ''}" style="width:{week_pct}%"></div></div>
-    </div>
-
-    <div class="kpi-card">
-        <div class="kpi-label">Holder til (est.)</div>
-        <div class="kpi-number">{days_left_est}</div>
-        <div class="kpi-unit">dager &nbsp;·&nbsp; {avg_per_day} snitt/dag</div>
-        <div class="kpi-bar-bg"><div class="kpi-bar-fill" style="width:55%"></div></div>
-    </div>
-
 </div>
 """, unsafe_allow_html=True)
+
+# ── KPI-KORT ─────────────────────────────────────────────────────────────────
+def kpi_card(label, value, unit, bar_pct, color=NAVY):
+    bar_pct = max(0, min(bar_pct, 100))
+    return f"""
+    <div style="background:{WHITE};border-top:4px solid {color};border-radius:2px;
+                padding:22px 20px 18px;height:100%;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:2.5px;
+                    text-transform:uppercase;color:#999;margin-bottom:10px;">{label}</div>
+        <div style="font-family:'EB Garamond',serif;font-size:50px;font-weight:700;
+                    color:{color};line-height:1;margin-bottom:4px;">{value}</div>
+        <div style="font-size:11px;color:#aaa;margin-bottom:14px;">{unit}</div>
+        <div style="background:{BEIGE};height:3px;border-radius:2px;overflow:hidden;">
+            <div style="width:{bar_pct}%;height:100%;background:{color};border-radius:2px;"></div>
+        </div>
+    </div>"""
+
+c1, c2, c3, c4 = st.columns(4)
+warn_color = ORANGE if pct_left < 25 else NAVY
+
+with c1:
+    st.markdown(kpi_card("YT igjen", data["current_count"],
+        f"av {data['start_count']} totalt", pct_left, warn_color),
+        unsafe_allow_html=True)
+with c2:
+    st.markdown(kpi_card("Total protein", f"{total_protein}g",
+        f"{total_taken} enheter · siden {data['start_date']}", 100, TEAL),
+        unsafe_allow_html=True)
+with c3:
+    w_color = TEAL if week_pct >= 100 else NAVY
+    st.markdown(kpi_card("Protein denne uken", f"{week_protein}g",
+        f"mål {weekly_goal}g · {week_pct}% nådd", week_pct, w_color),
+        unsafe_allow_html=True)
+with c4:
+    st.markdown(kpi_card("Holder til (est.)", str(days_left),
+        f"dager · {avg_per_day} snitt/dag", 55, NAVY),
+        unsafe_allow_html=True)
+
+st.markdown("<br>", unsafe_allow_html=True)
 
 if data["current_count"] == 0:
     st.error("🚨 Kjøleskapet er tomt – tid for påfyll!")
 elif data["current_count"] <= 5:
     st.warning(f"⚠️ Kun {data['current_count']} YT igjen.")
 
-st.markdown('<hr class="divider">', unsafe_allow_html=True)
+st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
+            unsafe_allow_html=True)
 
-# ─── REGISTRERING + STATISTIKK ────────────────────────────────────────────────
-col_left, col_right = st.columns([1, 1.65])
+# ── REGISTRER + STATISTIKK ────────────────────────────────────────────────────
+col_l, col_r = st.columns([1, 1.6])
 
-with col_left:
-    st.markdown('<div class="sec-head">Registrer inntak</div>', unsafe_allow_html=True)
+with col_l:
+    st.markdown(f"""<div style="font-family:'EB Garamond',serif;font-size:22px;
+        color:{NAVY};border-bottom:1px solid #d4cdc6;padding-bottom:10px;
+        margin-bottom:20px;">Registrer inntak</div>""", unsafe_allow_html=True)
 
-    user = st.selectbox("Hvem er du?", USERS)
+    user   = st.selectbox("Hvem er du?", data.get("users", ["Erik", "Trym"]))
     flavor_display = st.selectbox("Smak", list(FLAVORS.keys()))
     flavor = FLAVORS[flavor_display]
     amount = st.number_input("Antall YT", min_value=1,
-        max_value=max(data["current_count"], 1), value=1, step=1)
+                             max_value=max(data["current_count"], 1), value=1)
 
-    protein_preview = amount * 20
     st.markdown(f"""
-    <div style="background:#EFE7E0;border-radius:2px;padding:10px 14px;margin:4px 0 16px;font-size:12px;color:#555">
-        💪 Dette gir <strong style="color:#3B756A">{protein_preview}g protein</strong>
-    </div>
-    """, unsafe_allow_html=True)
+    <div style="background:{BEIGE};border-radius:2px;padding:10px 14px;
+                margin:4px 0 16px;font-size:12px;color:#555;">
+        💪 Dette gir <strong style="color:{TEAL};">{amount * 20}g protein</strong>
+    </div>""", unsafe_allow_html=True)
 
-    btn1, btn2 = st.columns(2)
-    with btn1:
+    b1, b2 = st.columns(2)
+    with b1:
         if st.button("REGISTRER →"):
             if data["current_count"] >= amount:
                 data["current_count"] -= amount
@@ -386,7 +236,7 @@ with col_left:
                 st.rerun()
             else:
                 st.error("Ikke nok YT igjen!")
-    with btn2:
+    with b2:
         if st.button("PÅFYLL +"):
             st.session_state["show_refill"] = not st.session_state.get("show_refill", False)
 
@@ -404,8 +254,11 @@ with col_left:
             st.success(f"✓ Lagt til {refill} YT. Nå: {data['current_count']}")
             st.rerun()
 
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
-    st.markdown('<div class="sec-head">Smaksfordeling</div>', unsafe_allow_html=True)
+    st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:20px 0'>",
+                unsafe_allow_html=True)
+    st.markdown(f"""<div style="font-family:'EB Garamond',serif;font-size:22px;
+        color:{NAVY};border-bottom:1px solid #d4cdc6;padding-bottom:10px;
+        margin-bottom:20px;">Smaksfordeling</div>""", unsafe_allow_html=True)
 
     flavor_counts = {"sjokolade": 0, "banan-jordbaer": 0}
     for e in data["log"]:
@@ -415,26 +268,28 @@ with col_left:
 
     total_f = sum(flavor_counts.values()) or 1
     flavor_cfg = {
-        "sjokolade":     {"label": "Sjokolade 🍫",      "color": "#5C3317"},
-        "banan-jordbaer":{"label": "Banan/Jordbær 🍌🍓", "color": "#3B756A"},
+        "sjokolade":      {"label": "Sjokolade 🍫",       "color": CHOC},
+        "banan-jordbaer": {"label": "Banan/Jordbær 🍌🍓",  "color": TEAL},
     }
     for fkey, cnt in flavor_counts.items():
-        pct_f = round(cnt / total_f * 100)
+        pf = round(cnt / total_f * 100)
         cfg = flavor_cfg[fkey]
         st.markdown(f"""
-        <div class="flavor-row">
-            <div class="flavor-meta">
-                <span class="flavor-name">{cfg['label']}</span>
-                <span>{cnt} stk · {pct_f}%</span>
+        <div style="margin-bottom:16px;">
+            <div style="display:flex;justify-content:space-between;
+                        font-size:12px;color:#555;margin-bottom:5px;">
+                <span style="font-weight:600;color:{NAVY};">{cfg['label']}</span>
+                <span>{cnt} stk · {pf}%</span>
             </div>
-            <div class="kpi-bar-bg">
-                <div class="kpi-bar-fill" style="width:{pct_f}%;background:{cfg['color']}"></div>
+            <div style="background:{BEIGE};height:4px;border-radius:2px;overflow:hidden;">
+                <div style="width:{pf}%;height:100%;background:{cfg['color']};border-radius:2px;"></div>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+        </div>""", unsafe_allow_html=True)
 
-with col_right:
-    st.markdown('<div class="sec-head">Statistikk per person</div>', unsafe_allow_html=True)
+with col_r:
+    st.markdown(f"""<div style="font-family:'EB Garamond',serif;font-size:22px;
+        color:{NAVY};border-bottom:1px solid #d4cdc6;padding-bottom:10px;
+        margin-bottom:20px;">Statistikk per person</div>""", unsafe_allow_html=True)
 
     user_stats = {}
     for e in data["log"]:
@@ -452,29 +307,35 @@ with col_right:
     if user_stats:
         max_t = max(s["total"] for s in user_stats.values()) or 1
         for uname, stats in sorted(user_stats.items(), key=lambda x: -x[1]["total"]):
-            bar_w = round(stats["total"] / max_t * 100)
+            bw = round(stats["total"] / max_t * 100)
             st.markdown(f"""
-            <div class="person-card">
-                <div class="person-name">{uname}</div>
-                <div class="kpi-bar-bg" style="margin-bottom:8px">
-                    <div class="kpi-bar-fill teal" style="width:{bar_w}%"></div>
+            <div style="background:{BEIGE};border-left:4px solid {TEAL};
+                        border-radius:2px;padding:16px 18px;margin-bottom:12px;">
+                <div style="font-weight:600;font-size:15px;color:{NAVY};margin-bottom:8px;">
+                    {uname}
                 </div>
-                <div class="person-stats">
+                <div style="background:#d4cdc6;height:3px;border-radius:2px;
+                            overflow:hidden;margin-bottom:8px;">
+                    <div style="width:{bw}%;height:100%;background:{TEAL};border-radius:2px;"></div>
+                </div>
+                <div style="font-size:11px;color:#777;">
                     {stats['total']} YT totalt &nbsp;·&nbsp;
                     {stats['protein']}g protein &nbsp;·&nbsp;
-                    🍫 {stats['sjokolade']} sjokolade &nbsp;·&nbsp;
-                    🍌🍓 {stats['banan-jordbaer']} banan/jordbær
+                    🍫 {stats['sjokolade']} &nbsp;·&nbsp;
+                    🍌🍓 {stats['banan-jordbaer']}
                 </div>
-            </div>
-            """, unsafe_allow_html=True)
+            </div>""", unsafe_allow_html=True)
     else:
-        st.markdown("<p style='color:#aaa;font-size:13px'>Ingen registreringer ennå.</p>",
+        st.markdown("<p style='color:#aaa;font-size:13px;'>Ingen registreringer ennå.</p>",
                     unsafe_allow_html=True)
 
-st.markdown('<hr class="divider">', unsafe_allow_html=True)
+st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
+            unsafe_allow_html=True)
 
-# ─── GRAF ─────────────────────────────────────────────────────────────────────
-st.markdown('<div class="sec-head">Daglig forbruk – siste 14 dager</div>', unsafe_allow_html=True)
+# ── GRAF ──────────────────────────────────────────────────────────────────────
+st.markdown(f"""<div style="font-family:'EB Garamond',serif;font-size:22px;
+    color:{NAVY};border-bottom:1px solid #d4cdc6;padding-bottom:10px;
+    margin-bottom:20px;">Daglig forbruk – siste 14 dager</div>""", unsafe_allow_html=True)
 
 chart_data = {}
 for i in range(13, -1, -1):
@@ -492,80 +353,86 @@ for e in data["log"]:
 
 df = pd.DataFrame.from_dict(chart_data, orient="index")
 df.index = [d[5:] for d in df.index]
-st.bar_chart(df, color=["#5C3317", "#3B756A"])
+st.bar_chart(df, color=[CHOC, TEAL])
 
-st.markdown('<hr class="divider">', unsafe_allow_html=True)
+st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
+            unsafe_allow_html=True)
 
-# ─── LOGG ─────────────────────────────────────────────────────────────────────
-st.markdown('<div class="sec-head">Siste registreringer</div>', unsafe_allow_html=True)
+# ── LOGG ──────────────────────────────────────────────────────────────────────
+st.markdown(f"""<div style="font-family:'EB Garamond',serif;font-size:22px;
+    color:{NAVY};border-bottom:1px solid #d4cdc6;padding-bottom:10px;
+    margin-bottom:20px;">Siste registreringer</div>""", unsafe_allow_html=True)
 
 visible = [e for e in data["log"] if e.get("flavor") != "påfyll"][:20]
 
 if visible:
     for e in visible:
-        f = e.get("flavor", "")
+        f       = e.get("flavor", "")
         is_choc = f == "sjokolade"
-        badge_class = "badge-sjokolade" if is_choc else "badge-banan-jordbaer"
-        label = "Sjokolade 🍫" if is_choc else "Banan/Jordbær 🍌🍓"
-        row_class = "log-row choc" if is_choc else "log-row"
+        border  = CHOC if is_choc else TEAL
+        label   = "Sjokolade 🍫" if is_choc else "Banan/Jordbær 🍌🍓"
+        bg_b    = "#f0e8e2" if is_choc else "#e4f0ee"
+        col_b   = CHOC if is_choc else TEAL
         st.markdown(f"""
-        <div class="{row_class}">
+        <div style="background:{WHITE};border-left:3px solid {border};
+                    border-radius:0 2px 2px 0;padding:11px 16px;margin-bottom:6px;
+                    display:flex;justify-content:space-between;align-items:center;
+                    font-size:13px;">
             <div>
-                <strong style="color:#1F2E4B">{e.get('user','–')}</strong>
-                <span style="color:#bbb;font-size:11px;margin-left:10px">
+                <strong style="color:{NAVY};">{e.get('user','–')}</strong>
+                <span style="color:#bbb;font-size:11px;margin-left:10px;">
                     {e['date']} · {e.get('time','–')}
                 </span>
             </div>
-            <div style="display:flex;gap:12px;align-items:center">
-                <span class="badge {badge_class}">{label}</span>
-                <span style="font-size:11px;color:#aaa">+20g protein</span>
+            <div style="display:flex;gap:12px;align-items:center;">
+                <span style="background:{bg_b};color:{col_b};padding:2px 10px;
+                             border-radius:2px;font-size:10px;font-weight:700;
+                             letter-spacing:1px;text-transform:uppercase;">{label}</span>
+                <span style="font-size:11px;color:#aaa;">+20g protein</span>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+        </div>""", unsafe_allow_html=True)
 else:
-    st.markdown("<p style='color:#aaa;font-size:13px'>Ingen registreringer ennå.</p>",
+    st.markdown("<p style='color:#aaa;font-size:13px;'>Ingen registreringer ennå.</p>",
                 unsafe_allow_html=True)
 
-st.markdown('<hr class="divider">', unsafe_allow_html=True)
+st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
+            unsafe_allow_html=True)
 
-# ─── INNSTILLINGER ────────────────────────────────────────────────────────────
+# ── INNSTILLINGER ─────────────────────────────────────────────────────────────
 with st.expander("⚙️  Innstillinger"):
     s1, s2 = st.columns(2)
-
     with s1:
         st.markdown("**Ukentlig proteinmål**")
-        new_goal = st.number_input("Gram protein per uke", min_value=20, max_value=2000,
-            value=data.get("weekly_protein_goal", 200), step=20)
+        new_goal = st.number_input("Gram protein per uke", min_value=20,
+                                   max_value=2000, value=weekly_goal, step=20)
         if st.button("LAGRE MÅL"):
             data["weekly_protein_goal"] = new_goal
             save_data(data)
             st.success("✓ Mål lagret")
             st.rerun()
-
     with s2:
         st.markdown("**Tilbakestill data**")
-        new_count = st.number_input("Nytt antall YT i kjøleskap", min_value=1, max_value=500, value=30)
+        new_count = st.number_input("Nytt antall YT", min_value=1, max_value=500, value=30)
         if st.button("TILBAKESTILL"):
             data = {
                 "start_date": str(date.today()),
                 "start_count": new_count,
                 "current_count": new_count,
-                "weekly_protein_goal": data.get("weekly_protein_goal", 200),
+                "weekly_protein_goal": weekly_goal,
                 "log": [],
                 "users": ["Erik", "Trym"]
             }
             save_data(data)
-            st.success(f"✓ Tilbakestilt til {new_count} YT fra i dag")
+            st.success(f"✓ Tilbakestilt til {new_count} YT")
             st.rerun()
 
-# ─── BUNNTEKST ────────────────────────────────────────────────────────────────
-st.markdown("""
+# ── FOOTER ────────────────────────────────────────────────────────────────────
+st.markdown(f"""
 <div style="margin-top:48px;padding:20px 0;border-top:1px solid #d4cdc6;
-    display:flex;justify-content:space-between;align-items:center">
-    <div style="font-family:'EB Garamond',serif;font-size:18px;
-        letter-spacing:4px;color:#1F2E4B;text-transform:uppercase">FERD.</div>
-    <div style="font-size:10px;letter-spacing:2px;color:#bbb;text-transform:uppercase">
+            display:flex;justify-content:space-between;align-items:center;">
+    <span style="font-family:'EB Garamond',serif;font-size:18px;letter-spacing:4px;
+                 color:{NAVY};text-transform:uppercase;">FERD.</span>
+    <span style="font-size:10px;letter-spacing:1.5px;color:#bbb;text-transform:uppercase;">
         Vi vil skape varige verdier og sette tydelige spor.
-    </div>
-</div>
-""", unsafe_allow_html=True)
+    </span>
+</div>""", unsafe_allow_html=True)
