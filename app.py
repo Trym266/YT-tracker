@@ -96,7 +96,6 @@ def load_data():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, "r") as f:
             d = json.load(f)
-        # Backward compat: legg til user_goals hvis mangler
         if "user_goals" not in d:
             d["user_goals"] = {u: d.get("weekly_protein_goal", 200) for u in d.get("users", [])}
         return d
@@ -121,7 +120,6 @@ total_taken   = data["start_count"] - data["current_count"]
 total_protein = total_taken * 20
 days_elapsed  = max((date.today() - date.fromisoformat(data["start_date"])).days + 1, 1)
 avg_per_day   = round(total_taken / days_elapsed, 1)
-days_left     = round(data["current_count"] / avg_per_day) if avg_per_day > 0 else "–"
 pct_left      = round(data["current_count"] / data["start_count"] * 100)
 
 today_d    = date.today()
@@ -135,7 +133,6 @@ week_pct     = min(round(week_protein / weekly_goal * 100), 100)
 
 # ── HJELPEFUNKSJONER ──────────────────────────────────────────────────────────
 def calc_streak(user, log):
-    """Antall dager på rad brukeren har registrert minst én YT."""
     days_with_log = set(
         e["date"] for e in log
         if e.get("user") == user and e.get("flavor") != "påfyll"
@@ -193,12 +190,27 @@ def kpi_card(label, value, unit, bar_pct, color=NAVY):
         </div>
     </div>"""
 
+# Beste streak
+best_streak_user, best_streak_val = "–", 0
+for u in data.get("users", []):
+    s = calc_streak(u, data["log"])
+    if s > best_streak_val:
+        best_streak_val, best_streak_user = s, u
+
+# Ukens leder
+week_leader, week_leader_protein = "–", 0
+for u in data.get("users", []):
+    u_protein = sum(20 for e in week_log if e.get("user") == u)
+    if u_protein > week_leader_protein:
+        week_leader_protein, week_leader = u_protein, u
+
 c1, c2, c3, c4 = st.columns(4)
-warn_color = ORANGE if pct_left < 25 else NAVY
 
 with c1:
-    st.markdown(kpi_card("YT igjen", data["current_count"],
-        f"av {data['start_count']} totalt", pct_left, warn_color),
+    streak_unit = f"dag{'er' if best_streak_val != 1 else ''} på rad" if best_streak_val > 0 else "ingen streak ennå"
+    streak_pct = min(best_streak_val * 10, 100)
+    st.markdown(kpi_card("Beste streak", f"🔥 {best_streak_val}" if best_streak_val > 0 else "–",
+        f"{best_streak_user} · {streak_unit}", streak_pct, ORANGE),
         unsafe_allow_html=True)
 with c2:
     st.markdown(kpi_card("Total protein", f"{total_protein}g",
@@ -210,16 +222,13 @@ with c3:
         f"mål {weekly_goal}g · {week_pct}% nådd", week_pct, w_color),
         unsafe_allow_html=True)
 with c4:
-    st.markdown(kpi_card("Holder til (est.)", str(days_left),
-        f"dager · {avg_per_day} snitt/dag", 55, NAVY),
+    leader_pct = min(round(week_leader_protein / weekly_goal * 100), 100) if weekly_goal > 0 else 0
+    leader_unit = f"{week_leader_protein}g denne uken" if week_leader != "–" else "ingen registreringer"
+    st.markdown(kpi_card("Ukens leder", week_leader,
+        leader_unit, leader_pct, TEAL),
         unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
-
-if data["current_count"] == 0:
-    st.error("🚨 Kjøleskapet er tomt – tid for påfyll!")
-elif data["current_count"] <= 5:
-    st.warning(f"⚠️ Kun {data['current_count']} YT igjen.")
 
 st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
             unsafe_allow_html=True)
@@ -234,7 +243,6 @@ with col_l:
 
     user = st.selectbox("Hvem er du?", data.get("users", ["Erik", "Trym"]))
 
-    # ── DAGLIG PÅMINNELSE (feature 2) ─────────────────────────────────────────
     if not user_logged_today(user, data["log"]):
         st.markdown(f"""
         <div style="background:#fff3cd;border-left:4px solid {ORANGE};
@@ -244,10 +252,7 @@ with col_l:
         </div>""", unsafe_allow_html=True)
     else:
         streak = calc_streak(user, data["log"])
-        if streak > 1:
-            streak_text = f"🔥 {streak} dager på rad!"
-        else:
-            streak_text = "✓ Registrert i dag"
+        streak_text = f"🔥 {streak} dager på rad!" if streak > 1 else "✓ Registrert i dag"
         st.markdown(f"""
         <div style="background:#e8f5e9;border-left:4px solid {TEAL};
                     border-radius:2px;padding:10px 14px;margin-bottom:12px;
@@ -356,8 +361,6 @@ with col_r:
         max_t = max(s["total"] for s in user_stats.values()) or 1
         for uname, stats in sorted(user_stats.items(), key=lambda x: -x[1]["total"]):
             bw = round(stats["total"] / max_t * 100)
-
-            # Streak (feature 5)
             streak = calc_streak(uname, data["log"])
             streak_badge = (
                 f'<span style="background:#fff3cd;color:#856404;padding:2px 8px;'
@@ -365,7 +368,6 @@ with col_r:
                 f'🔥 {streak}d streak</span>'
             ) if streak > 0 else ""
 
-            # Per-person weekly goal (feature 1)
             user_weekly_goal = data.get("user_goals", {}).get(uname, weekly_goal)
             user_week_protein = sum(20 for e in week_log if e.get("user") == uname)
             user_week_pct = (
@@ -404,7 +406,7 @@ with col_r:
 st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
             unsafe_allow_html=True)
 
-# ── GRAF (feature 4: per person eller per smak) ───────────────────────────────
+# ── GRAF ──────────────────────────────────────────────────────────────────────
 st.markdown(f"""<div style="font-family:'EB Garamond',serif;font-size:22px;
     color:{NAVY};border-bottom:1px solid #d4cdc6;padding-bottom:10px;
     margin-bottom:20px;">Daglig forbruk – siste 14 dager</div>""", unsafe_allow_html=True)
@@ -447,7 +449,7 @@ else:
 st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'>",
             unsafe_allow_html=True)
 
-# ── LOGG + CSV-EKSPORT (feature 6) ────────────────────────────────────────────
+# ── LOGG + CSV-EKSPORT ────────────────────────────────────────────────────────
 log_col, export_col = st.columns([3, 1])
 with log_col:
     st.markdown(f"""<div style="font-family:'EB Garamond',serif;font-size:22px;
@@ -506,7 +508,6 @@ st.markdown(f"<hr style='border:none;border-top:1px solid #d4cdc6;margin:24px 0'
 with st.expander("⚙️  Innstillinger"):
     tab1, tab2, tab3 = st.tabs(["Proteinmål", "Brukere", "Tilbakestill"])
 
-    # ── TAB 1: Per-person mål (feature 1) ────────────────────────────────────
     with tab1:
         st.markdown("**Ukentlig proteinmål per person**")
         user_goals = data.get("user_goals", {})
@@ -527,7 +528,6 @@ with st.expander("⚙️  Innstillinger"):
             st.success("✓ Mål lagret")
             st.rerun()
 
-    # ── TAB 2: Legg til / fjern brukere (feature 3) ──────────────────────────
     with tab2:
         st.markdown("**Legg til bruker**")
         new_user = st.text_input("Navn på ny bruker", key="new_user_input")
@@ -558,7 +558,6 @@ with st.expander("⚙️  Innstillinger"):
             st.markdown("<p style='color:#aaa;font-size:12px;'>Må ha minst én bruker.</p>",
                         unsafe_allow_html=True)
 
-    # ── TAB 3: Tilbakestill ───────────────────────────────────────────────────
     with tab3:
         st.markdown("**Tilbakestill data**")
         new_count = st.number_input("Nytt antall YT", min_value=1, max_value=500, value=30)
